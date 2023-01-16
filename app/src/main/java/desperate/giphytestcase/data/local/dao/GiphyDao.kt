@@ -13,9 +13,9 @@ interface GiphyDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(gifs: List<GifDbModel>)
 
-    @Query("SELECT * FROM gif_table WHERE isDeleted = 0")
+    @Query("SELECT * FROM giphy_table WHERE isDeleted = 0")
     fun getGifs(): PagingSource<Int, GifDbModel>
 
-    @Query("DELETE FROM gif_table WHERE isDeleted = 0")
+    @Query("DELETE FROM giphy_table WHERE isDeleted = 0")
     suspend fun deleteAll()
 }

@@ -9,12 +9,12 @@ import desperate.giphytestcase.data.local.entity.GiphyRemoteKeys
 @Dao
 interface GiphyRemoteKeysDao {
 
-    @Query("SELECT * FROM giphy_keys WHERE id =:id")
+    @Query("SELECT * FROM giphy_remote_keys WHERE id =:id")
     suspend fun getRemoteKeys(id: String) : GiphyRemoteKeys
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addRemoteKeys(remoteKeys: List<GiphyRemoteKeys>)
 
-    @Query("DELETE FROM giphy_keys")
+    @Query("DELETE FROM giphy_remote_keys")
     suspend fun deleteRemoteKeys()
 }

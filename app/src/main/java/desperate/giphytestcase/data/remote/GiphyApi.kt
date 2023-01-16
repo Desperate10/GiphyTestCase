@@ -11,12 +11,12 @@ interface GiphyApi {
     @GET("trending?api_key=${BuildConfig.API_KEY}&limit=20")
     suspend fun getTrending(
         @Query("offset") offset: Int
-    ) : Response<GiphyResponse>
+    ) : GiphyResponse
 
 
     @GET("search?api_key=${BuildConfig.API_KEY}&limit=20&offset=0rating=g&lang=en")
     suspend fun searchGifs(
         @Query("q") query: String
-    ): Response<GiphyResponse>
+    ): GiphyResponse
 
 }
