@@ -22,5 +22,9 @@
         android:id="@+id/fullScreenFragment"
         android:name="desperate.giphytestcase.presentation.screens.fullscreen.FullScreenFragment"
         android:label="fragment_full_screen"
-        tools:layout="@layout/fragment_full_screen" />
+        tools:layout="@layout/fragment_full_screen" >
+        <argument
+            android:name="offset"
+            app:argType="integer" />
+    </fragment>
 </navigation>
