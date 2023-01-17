@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "desperate.giphytestcase"
-        minSdk 23
+        minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -25,8 +25,12 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix = ".debug"
+            minifyEnabled false
         }
     }
     compileOptions {
@@ -66,6 +70,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
     // di hilt
     def hilt_version = "2.44"
     implementation "com.google.dagger:hilt-android:$hilt_version"

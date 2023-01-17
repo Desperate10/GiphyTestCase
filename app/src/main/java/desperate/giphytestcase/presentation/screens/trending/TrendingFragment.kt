@@ -12,14 +12,12 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import desperate.giphytestcase.R
+import desperate.giphytestcase.data.remote.connectivity.ConnectivityObserver
 import desperate.giphytestcase.databinding.FragmentTrendingBinding
 import desperate.giphytestcase.presentation.model.GifView
-import desperate.giphytestcase.presentation.model.UiState
 import desperate.giphytestcase.presentation.screens.trending.adapter.TrendingAdapter
-import desperate.giphytestcase.utils.SearchViewQueryTextCallback
-import desperate.giphytestcase.utils.autoCleaned
-import desperate.giphytestcase.utils.collectLifecycleFlow
-import desperate.giphytestcase.utils.setupQueryTextSubmit
+import desperate.giphytestcase.utils.*
 
 @AndroidEntryPoint
 class TrendingFragment : Fragment(),
@@ -40,10 +38,10 @@ class TrendingFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bindAdapter()
         observeViewModel()
-        setListeners()
+        setupListeners()
     }
 
-    private fun setListeners() {
+    private fun setupListeners() {
         binding.swipeRefreshLayout.setOnRefreshListener { adapter.refresh() }
         setupSubmitSearchListener()
         onRemoveTextListener()
@@ -70,12 +68,19 @@ class TrendingFragment : Fragment(),
                 }
 
                 LoadState.Loading -> {
-
+                    binding.swipeRefreshLayout.isRefreshing = true
                 }
 
                 is LoadState.Error -> {
+                    binding.rootLayout.snackBar(getString(R.string.error))
                     binding.swipeRefreshLayout.isRefreshing = false
                 }
+            }
+        }
+
+        collectLifecycleFlow(viewModel.status) { status ->
+            if (status == ConnectivityObserver.Status.Lost) {
+                binding.rootLayout.snackBar(getString(R.string.no_internet))
             }
         }
     }
@@ -83,30 +88,17 @@ class TrendingFragment : Fragment(),
     private fun setupSubmitSearchListener() {
         binding.searchView.setupQueryTextSubmit(object : SearchViewQueryTextCallback {
             override fun onQueryTextSubmit(query: String?) {
-                query?.let { viewModel.searchGifsByQuery(it) }
+                query?.let {
+                    viewModel.searchGifsByQuery(it)
+                    viewModel.setSearchQueryText(it)
+                }
             }
         })
     }
 
     override fun onClick(position: Int) {
-        when (viewModel.state.value) {
-            UiState.TrendingMode -> {
-                findNavController().navigate(
-                    TrendingFragmentDirections.actionTrendingFragmentToFullScreenFragment(
-                        position,
-                        ""
-                    )
-                )
-            }
-            UiState.SearchMode -> {
-                findNavController().navigate(
-                    TrendingFragmentDirections.actionTrendingFragmentToFullScreenFragment(
-                        position,
-                        binding.searchView.query.toString()
-                    )
-                )
-            }
-        }
+        hideKeyboard()
+        navigateToFullScreenFragment(position)
     }
 
     override fun onLongCLick(gif: GifView) {
@@ -122,5 +114,12 @@ class TrendingFragment : Fragment(),
         }
     }
 
-
+    private fun navigateToFullScreenFragment(position: Int) {
+        findNavController().navigate(
+            TrendingFragmentDirections.actionTrendingFragmentToFullScreenFragment(
+                position,
+                viewModel.searchQuery.value
+            )
+        )
+    }
 }

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">GiphyTestCase</string>
     <string name="search_hint">Search...</string>
+    <string name="error">Error loading gifs. Check connection</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="connection_ok">Connected</string>
 </resources>

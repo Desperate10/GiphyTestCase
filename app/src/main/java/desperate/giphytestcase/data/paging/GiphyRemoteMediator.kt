@@ -10,6 +10,7 @@ import desperate.giphytestcase.data.local.entity.GifDbModel
 import desperate.giphytestcase.data.local.entity.GiphyRemoteKeys
 import desperate.giphytestcase.data.mapper.mapDtModelToDbModel
 import desperate.giphytestcase.data.remote.GiphyApi
+import desperate.giphytestcase.utils.Constants.ITEMS_PER_PAGE_TRENDING
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -52,7 +53,7 @@ class GiphyRemoteMediator @Inject constructor(
             val response = giphyApi.getTrending(
                 offset = when(loadType) {
                     LoadType.REFRESH -> 0
-                    else -> currentPage * 20
+                    else -> currentPage * ITEMS_PER_PAGE_TRENDING
                 }
             ).data
 
