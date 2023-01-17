@@ -16,6 +16,9 @@ interface GiphyDao {
     @Query("SELECT * FROM giphy_table WHERE isDeleted = 0")
     fun getGifs(): PagingSource<Int, GifDbModel>
 
+    @Query("UPDATE giphy_table SET isDeleted = 1 WHERE id = :id")
+    suspend fun hideGif(id: String)
+
     @Query("DELETE FROM giphy_table WHERE isDeleted = 0")
     suspend fun deleteAll()
 }

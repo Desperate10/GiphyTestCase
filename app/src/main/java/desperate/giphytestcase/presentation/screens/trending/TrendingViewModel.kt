@@ -41,4 +41,10 @@ class TrendingViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteGif(gif: GifView) {
+        viewModelScope.launch {
+            repository.deleteGif(gif.id)
+        }
+    }
 }

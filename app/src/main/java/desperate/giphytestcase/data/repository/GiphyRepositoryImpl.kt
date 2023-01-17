@@ -40,4 +40,8 @@ class GiphyRepositoryImpl @Inject constructor(
             }
         ).flow
     }
+
+    override suspend fun deleteGif(gifId: String) {
+        giphyDatabase.giphyDao().hideGif(gifId)
+    }
 }

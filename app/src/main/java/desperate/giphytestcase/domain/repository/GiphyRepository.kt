@@ -10,4 +10,6 @@ interface GiphyRepository {
 
     fun search(query: String): Flow<PagingData<Gif>>
 
+    suspend fun deleteGif(gifId: String)
+
 }

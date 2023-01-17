@@ -67,9 +67,11 @@ class TrendingFragment : Fragment(),
                 is LoadState.NotLoading -> {
                     binding.swipeRefreshLayout.isRefreshing = false
                 }
+
                 LoadState.Loading -> {
 
                 }
+
                 is LoadState.Error -> {
                     binding.swipeRefreshLayout.isRefreshing = false
                 }
@@ -94,7 +96,7 @@ class TrendingFragment : Fragment(),
     }
 
     override fun onLongCLick(gif: GifView) {
-
+        viewModel.deleteGif(gif)
     }
 
     private fun onRemoveTextListener() {
