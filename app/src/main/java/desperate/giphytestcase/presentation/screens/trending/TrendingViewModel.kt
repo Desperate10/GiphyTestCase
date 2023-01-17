@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import desperate.giphytestcase.data.mapper.mapDomainModelToView
 import desperate.giphytestcase.domain.repository.GiphyRepository
 import desperate.giphytestcase.presentation.model.GifView
+import desperate.giphytestcase.presentation.model.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,6 +20,9 @@ class TrendingViewModel @Inject constructor(
     private val repository: GiphyRepository
 ) : ViewModel() {
 
+    private val _state = MutableStateFlow<UiState>(UiState.TrendingMode)
+    val state :StateFlow<UiState> = _state
+
     private val _gifs = MutableStateFlow<PagingData<GifView>>(PagingData.empty())
     val gifs : StateFlow<PagingData<GifView>> = _gifs
 
@@ -28,6 +32,7 @@ class TrendingViewModel @Inject constructor(
 
     fun getTrendingGifs() {
         viewModelScope.launch {
+            _state.value = UiState.TrendingMode
             repository.getTrending().cachedIn(viewModelScope).collect { gif->
                 _gifs.value = gif.map { mapDomainModelToView(it) }
             }
@@ -35,6 +40,7 @@ class TrendingViewModel @Inject constructor(
     }
 
     fun searchGifsByQuery(query: String) {
+        _state.value = UiState.SearchMode
         viewModelScope.launch {
             repository.search(query = query).cachedIn(viewModelScope).collect { gif->
                 _gifs.value = gif.map { mapDomainModelToView(it) }

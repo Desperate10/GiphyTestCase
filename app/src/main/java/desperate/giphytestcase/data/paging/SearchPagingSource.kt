@@ -14,12 +14,11 @@ class SearchPagingSource (
         val currentPage = params.key ?: 1
         return try {
             val response = giphyApi.searchGifs(query = query)
-            val endOfPaginationReached = response.data.isEmpty()
             if (response.data.isNotEmpty()) {
                 LoadResult.Page(
                     data = response.data,
                     prevKey = if (currentPage == 1) null else currentPage - 1,
-                    nextKey = if (endOfPaginationReached) null else currentPage + 1
+                    nextKey = currentPage + 1
                 )
             } else {
                 LoadResult.Page(

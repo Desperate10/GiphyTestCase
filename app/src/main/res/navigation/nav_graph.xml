@@ -26,5 +26,8 @@
         <argument
             android:name="offset"
             app:argType="integer" />
+        <argument
+            android:name="searchText"
+            app:argType="string" />
     </fragment>
 </navigation>

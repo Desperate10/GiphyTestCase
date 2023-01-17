@@ -34,7 +34,7 @@ class GiphyRepositoryImpl @Inject constructor(
 
     override fun search(query: String): Flow<PagingData<Gif>> {
         return Pager(
-            config = PagingConfig(pageSize = 20),
+            config = PagingConfig(pageSize = 50),
             pagingSourceFactory = {
                 SearchPagingSource(giphyApi = giphyApi, query = query)
             }

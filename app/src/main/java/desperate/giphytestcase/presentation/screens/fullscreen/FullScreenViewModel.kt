@@ -8,9 +8,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FullScreenViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     repository: GiphyRepository
 ) : ViewModel() {
 
-    val gifs = repository.getTrending()
+    private val args by lazy { FullScreenFragmentArgs.fromSavedStateHandle(savedStateHandle) }
+
+    val gifs = if (args.searchText.isEmpty()) {
+        repository.getTrending()
+    } else {
+        repository.search(args.searchText)
+    }
 
 }

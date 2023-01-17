@@ -13,11 +13,11 @@ class TrendingAdapter : PagingDataAdapter<GifView, TrendingViewHolder>(TrendingD
     var onGifClickListener: OnGifClickListener? = null
 
     override fun onBindViewHolder(holder: TrendingViewHolder, position: Int) {
-        val gifItem = getItem(position)!!
+        val gifItem = getItem(position)
         with(holder.binding) {
             gifItem.also {
                 Glide.with(gif)
-                    .load(it.url)
+                    .load(it?.url)
                     .placeholder(R.drawable.ic_placeholder)
                     .into(gif)
             }
@@ -26,7 +26,7 @@ class TrendingAdapter : PagingDataAdapter<GifView, TrendingViewHolder>(TrendingD
                 onGifClickListener?.onClick(position)
             }
             root.setOnLongClickListener {
-                onGifClickListener?.onLongCLick(gifItem)
+                gifItem?.let { gif -> onGifClickListener?.onLongCLick(gif) }
                 true
             }
         }

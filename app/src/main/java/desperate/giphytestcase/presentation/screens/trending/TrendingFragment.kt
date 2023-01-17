@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import desperate.giphytestcase.databinding.FragmentTrendingBinding
 import desperate.giphytestcase.presentation.model.GifView
+import desperate.giphytestcase.presentation.model.UiState
 import desperate.giphytestcase.presentation.screens.trending.adapter.TrendingAdapter
 import desperate.giphytestcase.utils.SearchViewQueryTextCallback
 import desperate.giphytestcase.utils.autoCleaned
@@ -88,11 +89,24 @@ class TrendingFragment : Fragment(),
     }
 
     override fun onClick(position: Int) {
-        findNavController().navigate(
-            TrendingFragmentDirections.actionTrendingFragmentToFullScreenFragment(
-                position
-            )
-        )
+        when (viewModel.state.value) {
+            UiState.TrendingMode -> {
+                findNavController().navigate(
+                    TrendingFragmentDirections.actionTrendingFragmentToFullScreenFragment(
+                        position,
+                        ""
+                    )
+                )
+            }
+            UiState.SearchMode -> {
+                findNavController().navigate(
+                    TrendingFragmentDirections.actionTrendingFragmentToFullScreenFragment(
+                        position,
+                        binding.searchView.query.toString()
+                    )
+                )
+            }
+        }
     }
 
     override fun onLongCLick(gif: GifView) {
