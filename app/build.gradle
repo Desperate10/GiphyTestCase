@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-parcelize'
+    id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
 }
@@ -66,7 +66,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
     // di hilt
-    def hilt_version = "2.42"
+    def hilt_version = "2.44"
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     //For Hilt support for ViewModel
