@@ -1,5 +1,6 @@
 package desperate.giphytestcase.utils
 
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,23 @@ fun <T> Fragment.collectLifecycleFlow(flow: (Flow<T?>)?, block: suspend (t: T) -
             }
         }
     }
+}
+
+interface SearchViewQueryTextCallback {
+    fun onQueryTextSubmit(query: String?)
+}
+
+fun SearchView.setupQueryTextSubmit (callback: SearchViewQueryTextCallback) {
+    setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            callback.onQueryTextSubmit(query)
+            return true
+        }
+
+        override fun onQueryTextChange(query: String?): Boolean {
+            return false
+        }
+    })
 }
 
 fun <T : Any> Fragment.autoCleaned(initializer: (() -> T)? = null): AutoCleanedValue<T> {
