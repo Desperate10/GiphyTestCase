@@ -10,6 +10,7 @@ import desperate.giphytestcase.data.local.entity.GifDbModel
 import desperate.giphytestcase.data.local.entity.GiphyRemoteKeys
 import desperate.giphytestcase.data.mapper.mapDtModelToDbModel
 import desperate.giphytestcase.data.remote.GiphyApi
+import desperate.giphytestcase.utils.Constants.ITEMS_PER_PAGE_TRENDING
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -24,7 +25,7 @@ class GiphyRemoteMediator @Inject constructor(
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, GifDbModel>
-    ): RemoteMediator.MediatorResult {
+    ): MediatorResult {
         return try {
             val currentPage = when(loadType) {
                 LoadType.REFRESH -> {
@@ -34,7 +35,7 @@ class GiphyRemoteMediator @Inject constructor(
                 LoadType.PREPEND -> {
                     val remoteKeys = getRemoteKeyForFirstItem(state)
                     val prevPage = remoteKeys?.prevPage
-                        ?: return RemoteMediator.MediatorResult.Success(
+                        ?: return MediatorResult.Success(
                             endOfPaginationReached = remoteKeys != null
                         )
                     prevPage
@@ -42,7 +43,7 @@ class GiphyRemoteMediator @Inject constructor(
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeyForLastItem(state)
                     val nextPage = remoteKeys?.nextPage
-                        ?:return RemoteMediator.MediatorResult.Success(
+                        ?:return MediatorResult.Success(
                             endOfPaginationReached = remoteKeys != null
                         )
                     nextPage
@@ -52,14 +53,14 @@ class GiphyRemoteMediator @Inject constructor(
             val response = giphyApi.getTrending(
                 offset = when(loadType) {
                     LoadType.REFRESH -> 0
-                    else -> currentPage * 20
+                    else -> currentPage * ITEMS_PER_PAGE_TRENDING
                 }
             ).data
 
             val endOfPaginationReached = response.isEmpty()
 
             val prevPage = if (currentPage == 1) null else currentPage-1
-            val nextPage = if (endOfPaginationReached == true) null else currentPage+1
+            val nextPage = if (endOfPaginationReached) null else currentPage+1
 
             giphyDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -76,9 +77,9 @@ class GiphyRemoteMediator @Inject constructor(
                 giphyRemoteKeysDao.addRemoteKeys(remoteKeys = keys)
                 giphyDao.insertAll(gifs = response.map { mapDtModelToDbModel(it) })
             }
-            RemoteMediator.MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
+            MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception) {
-            return RemoteMediator.MediatorResult.Error(e)
+            return MediatorResult.Error(e)
         }
     }
 

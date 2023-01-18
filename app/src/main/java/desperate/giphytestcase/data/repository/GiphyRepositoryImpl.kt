@@ -8,6 +8,8 @@ import desperate.giphytestcase.data.paging.SearchPagingSource
 import desperate.giphytestcase.data.remote.GiphyApi
 import desperate.giphytestcase.domain.model.Gif
 import desperate.giphytestcase.domain.repository.GiphyRepository
+import desperate.giphytestcase.utils.Constants.ITEMS_PER_PAGE_SEARCH
+import desperate.giphytestcase.utils.Constants.ITEMS_PER_PAGE_TRENDING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -21,7 +23,7 @@ class GiphyRepositoryImpl @Inject constructor(
     override fun getTrending(): Flow<PagingData<Gif>> {
         val pagingSourceFactory = { giphyDatabase.giphyDao().getGifs() }
         return Pager(
-            config = PagingConfig(pageSize = 20),
+            config = PagingConfig(pageSize = ITEMS_PER_PAGE_TRENDING),
             remoteMediator = GiphyRemoteMediator(
                 giphyApi = giphyApi,
                 giphyDatabase = giphyDatabase,
@@ -34,10 +36,14 @@ class GiphyRepositoryImpl @Inject constructor(
 
     override fun search(query: String): Flow<PagingData<Gif>> {
         return Pager(
-            config = PagingConfig(pageSize = 20),
+            config = PagingConfig(pageSize = ITEMS_PER_PAGE_SEARCH),
             pagingSourceFactory = {
                 SearchPagingSource(giphyApi = giphyApi, query = query)
             }
         ).flow
+    }
+
+    override suspend fun deleteGif(gifId: String) {
+        giphyDatabase.giphyDao().hideGif(gifId)
     }
 }
