@@ -20,7 +20,4 @@
         <item name="android:textColorHint">@color/material_dynamic_secondary80</item>
     </style>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
-        <item name="android:textColorSecondary">#EEEEEE</item>
-    </style>
 </resources>

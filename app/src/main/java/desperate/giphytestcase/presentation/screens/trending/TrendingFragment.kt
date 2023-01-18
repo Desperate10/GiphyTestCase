@@ -18,6 +18,7 @@ import desperate.giphytestcase.databinding.FragmentTrendingBinding
 import desperate.giphytestcase.presentation.model.GifView
 import desperate.giphytestcase.presentation.screens.trending.adapter.TrendingAdapter
 import desperate.giphytestcase.utils.*
+import desperate.giphytestcase.utils.Constants.EMPTY_STRING
 
 @AndroidEntryPoint
 class TrendingFragment : Fragment(),
@@ -97,7 +98,6 @@ class TrendingFragment : Fragment(),
     }
 
     override fun onClick(position: Int) {
-        hideKeyboard()
         navigateToFullScreenFragment(position)
     }
 
@@ -109,7 +109,8 @@ class TrendingFragment : Fragment(),
         val clearButton =
             binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
         clearButton.setOnClickListener {
-            binding.searchView.setQuery("", false)
+            binding.searchView.setQuery(EMPTY_STRING, false)
+            viewModel.setSearchQueryText(EMPTY_STRING)
             viewModel.getTrendingGifs()
         }
     }
