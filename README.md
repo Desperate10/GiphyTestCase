@@ -47,7 +47,7 @@
 ### Итоговое время выполнения - 27 часов
 
 
-
+https://user-images.githubusercontent.com/25912592/213509745-19d7d4af-feaf-4aa2-8b80-19db910fa795.mp4
 
 
 
