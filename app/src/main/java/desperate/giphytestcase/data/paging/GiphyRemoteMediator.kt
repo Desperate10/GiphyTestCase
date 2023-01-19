@@ -53,7 +53,7 @@ class GiphyRemoteMediator @Inject constructor(
             val response = giphyApi.getTrending(
                 offset = when(loadType) {
                     LoadType.REFRESH -> 0
-                    else -> currentPage * ITEMS_PER_PAGE_TRENDING
+                    else -> (currentPage * ITEMS_PER_PAGE_TRENDING) - ITEMS_PER_PAGE_TRENDING
                 }
             ).data
 

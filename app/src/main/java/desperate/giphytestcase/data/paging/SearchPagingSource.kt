@@ -4,8 +4,9 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import desperate.giphytestcase.data.remote.GiphyApi
 import desperate.giphytestcase.domain.model.Gif
+import desperate.giphytestcase.utils.Constants.ITEMS_PER_PAGE_SEARCH
 
-class SearchPagingSource (
+class SearchPagingSource(
     private val giphyApi: GiphyApi,
     private val query: String
 ) : PagingSource<Int, Gif>() {
@@ -13,7 +14,10 @@ class SearchPagingSource (
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Gif> {
         val currentPage = params.key ?: 1
         return try {
-            val response = giphyApi.searchGifs(query = query)
+            val response = giphyApi.searchGifs(
+                query = query,
+                offset = (currentPage * ITEMS_PER_PAGE_SEARCH) - ITEMS_PER_PAGE_SEARCH
+            )
             if (response.data.isNotEmpty()) {
                 LoadResult.Page(
                     data = response.data,

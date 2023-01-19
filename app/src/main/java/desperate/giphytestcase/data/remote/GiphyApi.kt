@@ -13,9 +13,10 @@ interface GiphyApi {
     ) : GiphyResponse
 
 
-    @GET("search?api_key=${BuildConfig.API_KEY}&limit=20&offset=0rating=g&lang=en")
+    @GET("search?api_key=${BuildConfig.API_KEY}&limit=20")
     suspend fun searchGifs(
-        @Query("q") query: String
+        @Query("q") query: String,
+        @Query("offset") offset: Int
     ): GiphyResponse
 
 }

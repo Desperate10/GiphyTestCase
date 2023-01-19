@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import androidx.paging.map
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
-import desperate.giphytestcase.data.mapper.mapDomainModelToView
 import desperate.giphytestcase.databinding.FragmentFullScreenBinding
 import desperate.giphytestcase.presentation.screens.fullscreen.adapter.GifFullScreenAdapter
 import desperate.giphytestcase.utils.autoCleaned
@@ -47,7 +45,7 @@ class FullScreenFragment : Fragment() {
 
     private fun observeViewModel() {
         collectLifecycleFlow(viewModel.gifs) { gif->
-            adapter.submitData(gif.map { mapDomainModelToView(it) })
+            adapter.submitData(gif)
         }
     }
 
